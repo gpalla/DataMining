@@ -73,6 +73,7 @@ public class DataMining {
     }
     //End calcCost
     
+    //Start calcRev
     public static double calcRev(ArrayList<RawData> array){
         double rev = 0;
         for(int i=0; i<array.size();i++){
@@ -83,6 +84,25 @@ public class DataMining {
         }
         return rev;
     }
+    //End calcRev
+    
+    //Start extractYear
+    //Used to split all data and make specific arrays for 1 year.
+    public static ArrayList<RawData> extractYear(ArrayList<RawData> mainArray, int year){
+        ArrayList<RawData> selectedYear = new ArrayList<RawData>();
+        String dateSplit = "/";
+        
+        for(int i=0; i<mainArray.size(); i++){
+            String[] subArray = mainArray.get(i).getDate().split(dateSplit);
+            int arrayYear = Integer.parseInt(subArray[2]);
+            if(arrayYear == year){
+                selectedYear.add(mainArray.get(i));
+            }
+        }
+        
+        return selectedYear;
+    }
+    //End extractYear
  
     public static void main(String[] args) {
         
@@ -125,6 +145,35 @@ public class DataMining {
         double rev = calcRev(mainArray);
         System.out.println("Total Cost: "+cost+" Total Rev: "+rev);
         
+        ArrayList<RawData> year2008 = extractYear(mainArray, 2008);
+        double cost2008 = calcCost(year2008);
+        double rev2008 = calcRev(year2008);
+        System.out.println("2008 Cost: "+cost2008+" 2008 Rev: "+rev2008);
+        
+        ArrayList<RawData> year2009 = extractYear(mainArray, 2009);
+        double cost2009 = calcCost(year2009);
+        double rev2009 = calcRev(year2009);
+        System.out.println("2009 Cost: "+cost2009+" 2009 Rev: "+rev2009);
+        
+        ArrayList<RawData> year2010 = extractYear(mainArray, 2010);
+        double cost2010 = calcCost(year2010);
+        double rev2010 = calcRev(year2010);
+        System.out.println("2010 Cost: "+cost2010+" 2010 Rev: "+rev2010);
+        
+        ArrayList<RawData> year2011 = extractYear(mainArray, 2011);
+        double cost2011 = calcCost(year2011);
+        double rev2011 = calcRev(year2011);
+        System.out.println("2011 Cost: "+cost2011+" 2011 Rev: "+rev2011);
+        
+        ArrayList<RawData> year2012 = extractYear(mainArray, 2012);
+        double cost2012 = calcCost(year2012);
+        double rev2012 = calcRev(year2012);
+        System.out.println("2012 Cost: "+cost2012+" 2012 Rev: "+rev2012);
+        
+        ArrayList<RawData> year2013 = extractYear(mainArray, 2013);
+        double cost2013 = calcCost(year2013);
+        double rev2013 = calcRev(year2013);
+        System.out.println("2013 Cost: "+cost2013+" 2009 Rev: "+rev2013);
 	
     }
     
