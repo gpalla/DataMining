@@ -174,6 +174,8 @@ public class DataMining {
         double cost2013 = calcCost(year2013);
         double rev2013 = calcRev(year2013);
         System.out.println("2013 Cost: "+cost2013+" 2009 Rev: "+rev2013);
+        
+        System.out.println("End of Program Exiting");
 	
     }
     
