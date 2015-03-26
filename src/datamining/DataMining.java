@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.lang.Math;
 
 public class DataMining {
     
@@ -103,6 +104,135 @@ public class DataMining {
         return selectedYear;
     }
     //End extractYear
+    
+    //Calc y=mx+b
+    public static double forecastCost(ArrayList<yearStats> ys, int desiredYear){
+        int n = ys.size();
+        
+        
+        double a = 0;
+        for(int i = 0; i<n; i++){
+            a += ys.get(i).getYear() * ys.get(i).getCost();
+        }
+        a = a*n;
+        
+        
+        
+        double b = 0;
+        int bY = 0;
+        int bC = 0;
+        for(int i = 0; i<n; i++){
+            bY += ys.get(i).getYear();
+            bC += ys.get(i).getCost();
+            b = bY * bC;
+        }
+        
+        
+        
+        double c = 0;
+        for(int i = 0; i<n; i++){
+            c+= Math.pow(ys.get(i).getYear(), 2);
+        }
+        c = c*n;
+        
+        
+        double d = 0;
+        for(int i = 0; i<n; i++){
+            d = ys.get(i).getYear();
+        }
+        d = Math.pow(d, 2);
+        
+        double m = (a - b) / (c - d); 
+        
+        
+        double e = 0;
+        for(int i = 0; i<n; i++){
+            e += ys.get(i).getCost();
+        }
+        
+        
+        double f = 0;
+        for(int i = 0; i<n; i++){
+            f += ys.get(i).getYear();
+        }
+        f = f*m;
+        double yint = ((e-f)/n);
+        
+        double forcast = m*desiredYear+yint;
+        
+        return forcast;
+        
+    }
+    
+    public static double forecastRev(ArrayList<yearStats> ys, int desiredYear){
+        int n = ys.size();
+        
+        
+        double a = 0;
+        for(int i = 0; i<n; i++){
+            a += ys.get(i).getYear() * ys.get(i).getRev();
+        }
+        a = a*n;
+        
+        
+        
+        double b = 0;
+        int bY = 0;
+        int bC = 0;
+        for(int i = 0; i<n; i++){
+            bY += ys.get(i).getYear();
+            bC += ys.get(i).getRev();
+            b = bY * bC;
+        }
+        
+        
+        
+        double c = 0;
+        for(int i = 0; i<n; i++){
+            c+= Math.pow(ys.get(i).getYear(), 2);
+        }
+        c = c*n;
+        
+        
+        double d = 0;
+        for(int i = 0; i<n; i++){
+            d = ys.get(i).getYear();
+        }
+        d = Math.pow(d, 2);
+        
+        double m = (a - b) / (c - d); 
+        
+        
+        double e = 0;
+        for(int i = 0; i<n; i++){
+            e += ys.get(i).getRev();
+        }
+        
+        
+        double f = 0;
+        for(int i = 0; i<n; i++){
+            f += ys.get(i).getYear();
+        }
+        f = f*m;
+        double yint = ((e-f)/n);
+        
+        double forcast = m*desiredYear+yint;
+        
+        return forcast;
+        
+    }
+    
+    //Find ClosetFit
+    public static double closestFit(int missingYear, int knownYear1, double knownValue1, int knownYear2, double knownValue2){
+        double missingValue= 0;
+        
+        //phase1
+        
+        
+        
+        return missingValue;
+    }
+        
  
     public static void main(String[] args) {
         
@@ -140,40 +270,32 @@ public class DataMining {
 			}
 		}
 	}
-       // ArrayList<RawData> cronological = sortDate(mainArray);
+        ArrayList<RawData> cronological = sortDate(mainArray);
+        ArrayList<yearStats> Stats = new ArrayList<yearStats>();
+        
+        System.out.println("Please Enter the amount of years this data covers");
+        int yearsCovered = sc.nextInt();
+        System.out.println("What year does the data start at");
+        int yearBegin = sc.nextInt();
+        int yearEnd = yearBegin + yearsCovered;
+        for(int i = yearBegin; i<=yearEnd; i++ ){
+            ArrayList<RawData> sYear = extractYear(mainArray, i);
+            double sCost = calcCost(sYear);
+            double sRev = calcRev(sYear);
+            System.out.println("Year : "+i+" Cost: "+sCost+" Revenue: "+sRev);
+            yearStats ys = new yearStats(i, sCost, sRev);
+            Stats.add(ys);
+        }
+        
+        
         double cost = calcCost(mainArray);
         double rev = calcRev(mainArray);
         System.out.println("Total Cost: "+cost+" Total Rev: "+rev);
         
-        ArrayList<RawData> year2008 = extractYear(mainArray, 2008);
-        double cost2008 = calcCost(year2008);
-        double rev2008 = calcRev(year2008);
-        System.out.println("2008 Cost: "+cost2008+" 2008 Rev: "+rev2008);
+        double fCost14 = forecastCost(Stats,2014);
+        double fRev14 = forecastRev(Stats,2014);
+        System.out.println("Year: 2014 Forecasted Cost: "+fCost14+" Forecasted Rev: "+fRev14);
         
-        ArrayList<RawData> year2009 = extractYear(mainArray, 2009);
-        double cost2009 = calcCost(year2009);
-        double rev2009 = calcRev(year2009);
-        System.out.println("2009 Cost: "+cost2009+" 2009 Rev: "+rev2009);
-        
-        ArrayList<RawData> year2010 = extractYear(mainArray, 2010);
-        double cost2010 = calcCost(year2010);
-        double rev2010 = calcRev(year2010);
-        System.out.println("2010 Cost: "+cost2010+" 2010 Rev: "+rev2010);
-        
-        ArrayList<RawData> year2011 = extractYear(mainArray, 2011);
-        double cost2011 = calcCost(year2011);
-        double rev2011 = calcRev(year2011);
-        System.out.println("2011 Cost: "+cost2011+" 2011 Rev: "+rev2011);
-        
-        ArrayList<RawData> year2012 = extractYear(mainArray, 2012);
-        double cost2012 = calcCost(year2012);
-        double rev2012 = calcRev(year2012);
-        System.out.println("2012 Cost: "+cost2012+" 2012 Rev: "+rev2012);
-        
-        ArrayList<RawData> year2013 = extractYear(mainArray, 2013);
-        double cost2013 = calcCost(year2013);
-        double rev2013 = calcRev(year2013);
-        System.out.println("2013 Cost: "+cost2013+" 2009 Rev: "+rev2013);
        	
     }
     
