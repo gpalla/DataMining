@@ -222,15 +222,36 @@ public class DataMining {
         
     }
     
-    //Find ClosetFit
-    public static double closestFit(int missingYear, int knownYear1, double knownValue1, int knownYear2, double knownValue2){
-        double missingValue= 0;
+    //Cluster data
+    public static ArrayList<CategoryData> cluster(ArrayList<RawData> mainArray){
+        ArrayList<CategoryData> cluster = new ArrayList<CategoryData>();
+        CategoryData blank = new CategoryData(" ", 0, 0);
+        cluster.add(blank);
+        for(int i=0; i<mainArray.size(); i++){
+            String category = mainArray.get(i).getCategory();
+            double amount = mainArray.get(i).getAmount();
+            for(int j=0; j<cluster.size(); j++){
+                if(category.trim().equalsIgnoreCase(cluster.get(j).getCategory().trim())){
+                    if(amount < 0){
+                        double cost = cluster.get(j).getCost();
+                        cost += amount;
+                    }else{
+                        double rev = cluster.get(j).getRev();
+                        rev += amount;
+                    }
+                }else{
+                    if(amount < 0){
+                       CategoryData cd = new CategoryData(mainArray.get(i).getCategory(),amount,0);
+                       cluster.add(cd);
+                    }else{
+                        CategoryData cd = new CategoryData(mainArray.get(i).getCategory(),0,amount);
+                        cluster.add(cd);
+                    }
+                }
+            }
+        }
         
-        //phase1
-        
-        
-        
-        return missingValue;
+        return cluster;
     }
         
  
@@ -272,12 +293,15 @@ public class DataMining {
 	}
         ArrayList<RawData> cronological = sortDate(mainArray);
         ArrayList<yearStats> Stats = new ArrayList<yearStats>();
+        String dateSplit = "/";
+        String[] firstDate = cronological.get(0).getDate().split(dateSplit);
+        int yearBegin = Integer.parseInt(firstDate[2]);
         
-        System.out.println("Please Enter the amount of years this data covers");
-        int yearsCovered = sc.nextInt();
-        System.out.println("What year does the data start at");
-        int yearBegin = sc.nextInt();
-        int yearEnd = yearBegin + yearsCovered;
+        int lastYearLoc = cronological.size() - 1;
+        String[] lastDate = cronological.get(lastYearLoc).getDate().split(dateSplit);
+        int yearEnd = Integer.parseInt(lastDate[2]);
+        
+        
         for(int i = yearBegin; i<=yearEnd; i++ ){
             ArrayList<RawData> sYear = extractYear(mainArray, i);
             double sCost = calcCost(sYear);
@@ -292,9 +316,19 @@ public class DataMining {
         double rev = calcRev(mainArray);
         System.out.println("Total Cost: "+cost+" Total Rev: "+rev);
         
-        double fCost14 = forecastCost(Stats,2014);
-        double fRev14 = forecastRev(Stats,2014);
-        System.out.println("Year: 2014 Forecasted Cost: "+fCost14+" Forecasted Rev: "+fRev14);
+        int forecastYear = yearEnd + 1;
+        double fCost14 = forecastCost(Stats,forecastYear);
+        double fRev14 = forecastRev(Stats,forecastYear);
+        System.out.println("Year: "+forecastYear+" Forecasted Cost: "+fCost14+" Forecasted Rev: "+fRev14);
+        
+        ArrayList<CategoryData> clusteredCategory = new ArrayList<CategoryData>();
+        clusteredCategory = cluster(mainArray);
+        
+        System.out.println("Calculating Costs and Revenue for each category");
+        System.out.println(clusteredCategory.size());
+        for(int i=0; i<clusteredCategory.size(); i++){
+            System.out.println("Category: "+clusteredCategory.get(i).getCategory()+" Cost: "+clusteredCategory.get(i).getCost()+" Revenue: "+clusteredCategory.get(i).getRev());
+        }
         
        	
     }
