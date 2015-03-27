@@ -220,40 +220,7 @@ public class DataMining {
         
         return forcast;
         
-    }
-    
-    //Cluster data
-    public static ArrayList<CategoryData> cluster(ArrayList<RawData> mainArray){
-        ArrayList<CategoryData> cluster = new ArrayList<CategoryData>();
-        CategoryData blank = new CategoryData(" ", 0, 0);
-        cluster.add(blank);
-        for(int i=0; i<mainArray.size(); i++){
-            String category = mainArray.get(i).getCategory();
-            double amount = mainArray.get(i).getAmount();
-            for(int j=0; j<cluster.size(); j++){
-                if(category.trim().equalsIgnoreCase(cluster.get(j).getCategory().trim())){
-                    if(amount < 0){
-                        double cost = cluster.get(j).getCost();
-                        cost += amount;
-                    }else{
-                        double rev = cluster.get(j).getRev();
-                        rev += amount;
-                    }
-                }else{
-                    if(amount < 0){
-                       CategoryData cd = new CategoryData(mainArray.get(i).getCategory(),amount,0);
-                       cluster.add(cd);
-                    }else{
-                        CategoryData cd = new CategoryData(mainArray.get(i).getCategory(),0,amount);
-                        cluster.add(cd);
-                    }
-                }
-            }
-        }
-        
-        return cluster;
-    }
-        
+    }        
  
     public static void main(String[] args) {
         
@@ -311,26 +278,30 @@ public class DataMining {
             Stats.add(ys);
         }
         
+        ArrayList<CategoryData> CategoryList = new ArrayList<CategoryData>();
+               
+        for(int i = 0; i<CategoryList.size();i++){
+            System.out.println(CategoryList.get(i).getCategory());
+        }
+        
+        for(int i=0; i<Stats.size(); i++){
+           double yProfit = Stats.get(i).getRev() + Stats.get(i).getCost();
+           System.out.println(Stats.get(i).getYear()+" Profit: "+yProfit);
+        }
+        
         
         double cost = calcCost(mainArray);
         double rev = calcRev(mainArray);
         System.out.println("Total Cost: "+cost+" Total Rev: "+rev);
+        double profit = rev + cost;
+        System.out.println("Total Profit: "+profit);
         
         int forecastYear = yearEnd + 1;
         double fCost14 = forecastCost(Stats,forecastYear);
         double fRev14 = forecastRev(Stats,forecastYear);
-        System.out.println("Year: "+forecastYear+" Forecasted Cost: "+fCost14+" Forecasted Rev: "+fRev14);
-        
-        ArrayList<CategoryData> clusteredCategory = new ArrayList<CategoryData>();
-        clusteredCategory = cluster(mainArray);
-        
-        System.out.println("Calculating Costs and Revenue for each category");
-        System.out.println(clusteredCategory.size());
-        for(int i=0; i<clusteredCategory.size(); i++){
-            System.out.println("Category: "+clusteredCategory.get(i).getCategory()+" Cost: "+clusteredCategory.get(i).getCost()+" Revenue: "+clusteredCategory.get(i).getRev());
-        }
-        
+        System.out.println("Year: "+forecastYear+" Forecasted Cost: "+fCost14+" Forecasted Rev: "+fRev14);        
        	
+        
     }
     
 }

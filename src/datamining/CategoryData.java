@@ -10,13 +10,11 @@ package datamining;
  * @author gpalla
  */
 public class CategoryData {
-    String category;
-    double cost, rev;
+   private String category;
+    private double cost, rev;
     
-    public CategoryData(String category, double cost, double rev){
+    public CategoryData(String category){
         this.category = category;
-        this.cost = cost;
-        this.rev = rev;
     }
     
     public String getCategory(){
