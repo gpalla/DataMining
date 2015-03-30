@@ -325,6 +325,29 @@ public class DataMining {
         //Start Clustering Calculations
         
         for(int i = 0; i<Category.size(); i++){
+            ArrayList<RawData> subArray = new ArrayList<RawData>();
+            for(int j=0; j<mainArray.size(); j++){
+                if(Category.get(i).equals(mainArray.get(j).getCategory())){
+                    subArray.add(mainArray.get(j));
+                }
+            }
+            System.out.println("Category: "+Category.get(i)+" Data BreakDown----");
+            double catCost = calcCost(subArray);
+            double catRev = calcRev(subArray);
+            System.out.println("Total Cost: "+catCost+" Total Rev: "+catRev);
+            ArrayList<yearStats> catYS = new ArrayList<yearStats>();
+            for(int k = yearBegin; k<=yearEnd; k++ ){
+            ArrayList<RawData> sYear = extractYear(subArray, k);
+            double sCost = calcCost(sYear);
+            double sRev = calcRev(sYear);
+            System.out.println("Year : "+k+" Cost: "+sCost+" Revenue: "+sRev);
+            yearStats ys = new yearStats(k, sCost, sRev);
+            catYS.add(ys);
+            }
+            double fcatCost = forecastCost(catYS, yearEnd+1);
+            double fcatRev = forecastRev(catYS, yearEnd+1);
+            int fYear = yearEnd+1;
+            System.out.println("Forcast Year: "+fYear+" Cost: "+fcatCost+" Rev: "+fcatRev);
             
         }
        	
