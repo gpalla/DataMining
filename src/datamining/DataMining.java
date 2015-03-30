@@ -225,6 +225,8 @@ public class DataMining {
     public static void main(String[] args) {
         
         ArrayList<RawData> mainArray = new ArrayList<RawData>();
+        ArrayList<String> Category = new ArrayList<String>();
+        boolean Found = false;
         
         Scanner sc = new Scanner(System.in);
         
@@ -239,6 +241,21 @@ public class DataMining {
                br = new BufferedReader(new FileReader(csvFile));
                while((line = br.readLine()) != null){
                    String[] data = line.split(csvSplitBy);
+                   Found = false;
+                   //Cluster Creation
+                   if(Category.size() == 0){
+                       Category.add(data[1]);
+                   }
+                   for(int i = 0; i<Category.size(); i++){
+                       if(data[1].equals(Category.get(i))){
+                           Found = true;
+                       }
+                   }
+                   
+                   if(Found == false){
+                       Category.add(data[1]);
+                   }
+                   
                    String date = data[0];
                    String category = data[1];
                    double amount = Double.parseDouble(data[2]);
@@ -297,9 +314,19 @@ public class DataMining {
         System.out.println("Total Profit: "+profit);
         
         int forecastYear = yearEnd + 1;
-        double fCost14 = forecastCost(Stats,forecastYear);
-        double fRev14 = forecastRev(Stats,forecastYear);
-        System.out.println("Year: "+forecastYear+" Forecasted Cost: "+fCost14+" Forecasted Rev: "+fRev14);        
+        double fCost = forecastCost(Stats,forecastYear);
+        double fRev = forecastRev(Stats,forecastYear);
+        System.out.println("Year: "+forecastYear+" Forecasted Cost: "+fCost+" Forecasted Rev: "+fRev);
+        double fProfit = fRev - fCost;
+        System.out.println(forecastYear+" Forcasted Profit: "+fProfit);
+        
+        System.out.println("Calculating Cost, Revenue, and Profit based on category clustering");
+        
+        //Start Clustering Calculations
+        
+        for(int i = 0; i<Category.size(); i++){
+            
+        }
        	
         
     }
